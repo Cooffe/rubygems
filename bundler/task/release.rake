@@ -2,6 +2,8 @@
 
 require_relative "../lib/bundler/gem_tasks"
 
+Bundler::GemHelper.tag_prefix = "bundler-"
+
 task :build_metadata do
   build_metadata = {
     :built_at => Bundler::GemHelper.gemspec.date.utc.strftime("%Y-%m-%d"),
@@ -204,7 +206,7 @@ namespace :release do
     end
 
     def minor_release_tags
-      `git ls-remote origin`.split("\n").map {|r| r =~ %r{refs/tags/v([\d.]+)$} && $1 }.compact.map {|v| Gem::Version.create(Gem::Version.create(v).segments[0, 2].join(".")) }.sort.uniq
+      `git ls-remote origin`.split("\n").map {|r| r =~ %r{refs/tags/bundler-v([\d.]+)$} && $1 }.compact.map {|v| Gem::Version.create(Gem::Version.create(v).segments[0, 2].join(".")) }.sort.uniq
     end
 
     def to_stable_branch(release_tag)
